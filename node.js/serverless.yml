@@ -1,0 +1,42 @@
+frameworkVersion: '2'
+service: ref-nodejs
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'charlestest'} # Set the default stage used.
+  region: ${opt:region, 'us-east-1'}
+  vpc:
+    subnetIds: ${ssm:/${self:custom.prefix}/public_subnet_ids~split}
+    securityGroupIds:
+    - ${ssm:/${self:custom.prefix}/lambda_security_group_id}
+  apiGateway:
+    restApiId: ${ssm:/${self:custom.prefix}/apigw_id}
+    restApiRootResourceId: ${ssm:/${self:custom.prefix}/apigw_root_resource_id}
+  role: ${ssm:/${self:custom.prefix}/lambda_role_arn}
+  environment: # Service-wide environment variables
+    NODE_ENV: ${self:provider.stage}
+    DB_HOST: ${ssm:/${self:custom.prefix}/aurora/host}
+    DB_USER: ${ssm:/${self:custom.prefix}/aurora/user}
+    DB_PASSWORD: ${ssm:/${self:custom.prefix}/aurora/password~true}
+    DB_NAME: ${ssm:/${self:custom.prefix}/aurora/name}
+
+package:
+  excludeDevDependencies: true
+  exclude:
+    - terraform/**
+
+functions:
+  hello:
+    handler: index.hello
+    events:
+      - http: "GET /hello"
+      - http: "GET /hello/{proxy+}"
+  helloDb:
+    handler: index.hello_db
+    timeout: 120
+    events:
+      - http: "GET /hello-db"
+      - http: "GET /hello-db/{proxy+}"
+custom:
+  prefix: ${self:provider.stage}-${self:service}
