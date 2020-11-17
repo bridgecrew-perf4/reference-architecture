@@ -3,8 +3,8 @@
 locals {
   # Naming
   service_name = "ref-nodejs"
-  environment = "charlestest"
-  resource_prefix = "${local.environment}-${local.service_name}"
+  stage = "test"
+  resource_prefix = "${local.stage}-${local.service_name}"
 }
 
 provider "aws" {
