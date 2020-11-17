@@ -89,10 +89,6 @@ resource "aws_ssm_parameter" "aurora_user" {
   value = module.aurora.this_rds_cluster_master_username
 }
 
-output aurora {
-  value = module.aurora
-}
-
 ############################
 # Example of security group
 ############################

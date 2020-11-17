@@ -4,7 +4,7 @@ service: ref-nodejs
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'charlestest'} # Set the default stage used.
+  stage: ${opt:stage, 'test'} # Set the default stage used.
   region: ${opt:region, 'us-east-1'}
   vpc:
     subnetIds: ${ssm:/${self:custom.prefix}/public_subnet_ids~split}
