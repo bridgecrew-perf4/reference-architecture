@@ -1,4 +1,43 @@
+# Reference Architecture: Static site with S3 and CloudFront
+
+## Features
+
+* Simple hosting for static/generated websites
+* A separate test deployment to dev for every PR
+* Automatic deployment to production when merged to main branch
+
+### Deployment Process
+
+![Workflow of dev and prod deployments](./docs/img/reference-arch-s3.png)
+
 ## Initial Setup
+
+
+### Terraform
+
+The infrastructure is intended to be deployed twice.  Once for dev, and once for prod.  This can
+be accomplished in a number of ways with terraform.  Copying the directory; copying the resources;
+creating a subdirectory/local-module; using workspaces; etc.
+
+The following is how to deploy the initial configuration.
+
+* Install Terraform CLI
+* Configure AWS cli credentials
+* Configure `main.tf`'s `locals` block to your desried settings
+* Run `terraform init` then `terraform apply`.  This will create the backend resources, users, and permissions
+
+### GitHub Actions Config
+
+Running terraform apply will create a "ci_user" in AWS.  This will be used for GitHub Actions
+to auto-deploy.  Now you need to configure your GitHub repo with credentials to access
+this user.
+
+* Login to AWS Console
+* IAM => Users => `<app_name>-ci-user` => Security Credentials tab => Create Access Key
+* Keep this window open and login to GitHub with another window
+* Navigate to your Repo => Settings => Secrets
+* Create a secret for either `DEV_AWS_ACCESS_KEY_ID` or `PROD_AWS_ACCESS_KEY_ID`; copy access key id from AWS window
+* Create a secret for either `DEV_AWS_SECRET_ACCESS_KEY` or `PROD_AWS_SECRET_ACCESS_KEY`; copy secret key from AWS window
 
 ### AWS
 

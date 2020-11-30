@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# Intended to be used for hand-deployments.  However, the primary deployment vehicle
+# should be github actions, configured in `./.github/`
+
 # Configurable Environment Variables
 APP_NAME=${APP_NAME:-zombo-app}
 DEV_DOMAIN=${DEV_DOMAIN:-ussba.io}
