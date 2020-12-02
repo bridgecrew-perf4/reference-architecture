@@ -45,7 +45,10 @@ Your AWS credentials must be configured to point to the correct account.
 
 To test them, run `aws sts get-caller-identity`
 
-## Deployment
+## Manual Deployment
+
+Deployment happens automatically using GitHub Actions, but if you would prefer a manual deployment,
+we have provided a `deploy-to-s3.sh` script.
 
 Executing "./deploy-to-s3.sh" without providing an environment name will print
 out a robust usage message.  The script can be configured with environment variables
