@@ -12,7 +12,6 @@
 
 ## Initial Setup
 
-
 ### Terraform
 
 The infrastructure is intended to be deployed twice.  Once for dev, and once for prod.  This can
