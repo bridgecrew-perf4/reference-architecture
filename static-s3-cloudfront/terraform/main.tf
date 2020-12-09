@@ -11,8 +11,11 @@ locals {
 }
 
 module "static_site" {
+  #source = "../../../terraform-aws-static-website/"
   source  = "USSBA/static-website/aws"
   version = "~> 3.0"
+
+  force_destroy_buckets = true # When buckets are deleted, continue even if there is data inside
 
   domain_name         = local.domain_name
   acm_certificate_arn = local.acm_certificate_arn
@@ -25,7 +28,8 @@ module "static_site" {
 
 # IAM User for automated deployment with GitHub Actions
 resource "aws_iam_user" "ci_user" {
-  name = "${local.app_name}-ci-user"
+  name          = "${local.app_name}-ci-user"
+  force_destroy = true # When user is deleted, continue even if there are existing IAM Access Keys
 }
 
 data "aws_iam_policy_document" "ci_user" {

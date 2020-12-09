@@ -1,0 +1,41 @@
+frameworkVersion: '2'
+
+service: zombo-sls
+#enableLocalInstallationFallback: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'} # Set the default stage used. Default is dev
+  region: ${opt:region, 'us-east-1'}
+  #vpc:
+  #  subnetIds: ${ssm:/${self:provider.stage}/network/private_subnet_ids}
+  #  #securityGroupIds: []
+  apiGateway:
+    restApiId: ${ssm:${self:custom.parameter_prefix}/apigw_id}
+    restApiRootResourceId: ${ssm:${self:custom.parameter_prefix}/apigw_root_resource_id}
+  role: ${ssm:${self:custom.parameter_prefix}/lambda_role_arn}
+
+package:
+  ## If you want serverless to package the zip for you, exclude files here
+  exclude:
+  - terraform/**
+  - .nvmrc
+  ## If you build a zip in advance, configure it here
+  #artifact: workdir/prebuilt-zipfile.zip
+  excludeDevDependencies: false
+
+functions:
+  express:
+    name: ${self:custom.resource_prefix}-express
+    handler: src/index.handler
+    environment:
+      ## Pass the dynamodb table name via environment variable
+      TABLE_NAME: ${self:custom.resource_prefix}-table
+    events:
+      - http: "GET /"
+      - http: "GET /{proxy+}"
+custom:
+  ## Convenience variables to avoid repetition
+  resource_prefix: ${self:service}-${self:provider.stage}
+  parameter_prefix: /${self:service}/${self:provider.stage}
