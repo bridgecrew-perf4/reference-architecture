@@ -1,0 +1,18 @@
+frameworkVersion: '2'
+service: random-letter-sls
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'test'} # Set the default stage used.
+  region: ${opt:region, 'us-east-1'}
+
+functions:
+  random-letter:
+    image: ${self:custom.account}.dkr.ecr.${self:provider.region}.amazonaws.com/random-letter@sha256:dd37d7e9bac935e1864527575b080cbc532f7e76923c06719f224028f85cfc7f
+    events:
+      - httpApi: 'GET /random-letter'
+
+custom:
+  account: '502235151991'
+
+# https://lbpnflklgb.execute-api.us-east-1.amazonaws.com/random-letter
