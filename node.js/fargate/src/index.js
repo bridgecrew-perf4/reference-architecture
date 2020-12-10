@@ -1,16 +1,21 @@
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const db_config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-});
+  port: process.env.DB_PORT || 3306,
+}
+const connection = mysql.createConnection(db_config);
 
+const waitPort = require('wait-port');
 const express = require('express')
 const app = express()
 
 // Get table name from env var or default it to "hits"
 const HITS_TABLE = process.env.TABLE_NAME || "hits"
+
+const NODEJS_PORT = process.env.NODEJS_PORT || 8000
 
 // Simple hello world
 
@@ -61,14 +66,19 @@ app.get('*', function (req, res) {
   res.send(`Welcome to Zombocom, ${req.parsed_ip}! You've been to path [${req.path}] [${req.hits}] times.`)
 })
 
-// Set up DB
-const create_table = `CREATE TABLE IF NOT EXISTS ${HITS_TABLE} (ip VARCHAR(64) NOT NULL, path VARCHAR(64) NOT NULL, hits INT NOT NULL)`;
-connection.query(create_table, function (err, result) {
-  if (err) throw err;
-  console.log("Table created");
+// Wait for DB
 
-  // Start app
-  app.listen(8000, () => {
-    console.log(`Example app listening at http://localhost:8000`)
-  })
+waitPort({host: db_config.host, port: db_config.port}).then((open) => {
+
+  // Set up DB
+  const create_table = `CREATE TABLE IF NOT EXISTS ${HITS_TABLE} (ip VARCHAR(64) NOT NULL, path VARCHAR(64) NOT NULL, hits INT NOT NULL)`;
+  connection.query(create_table, function (err, result) {
+    if (err) throw err;
+    console.log("Table created");
+
+    // Start app
+    app.listen(NODEJS_PORT, () => {
+      console.log(`Example app listening at http://localhost:${NODEJS_PORT}`)
+    })
+  });
 });

@@ -2,6 +2,17 @@
 version: '3.1'
 
 services:
+  app:
+    build: .
+    environment:
+      DB_HOST: db
+      DB_USER: example
+      DB_PASSWORD: example
+      DB_NAME: example
+      TABLE_NAME: hits
+      NODEJS_PORT: 8000
+    ports:
+      - 8000:8000
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
