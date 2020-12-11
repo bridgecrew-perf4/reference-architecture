@@ -17,9 +17,9 @@ module "aurora" {
   replica_count         = 0
   ##backtrack_window = 10 # ignored in serverless
 
-  subnets                         = local.private_subnet_ids
-  vpc_id                          = local.vpc_id
-  monitoring_interval             = 60
+  subnets             = local.private_subnet_ids
+  vpc_id              = local.vpc_id
+  monitoring_interval = 60
   #instance_type                   = "db.r4.large" # ignored in serverless
   apply_immediately               = local.production_database_config ? false : true
   skip_final_snapshot             = local.production_database_config ? false : true

@@ -36,6 +36,11 @@ app.get('/bad-hits', function (req, res) {
   res.send(`Hello! I'm bad at counting, but I think I've had ${badcounter} hits!`)
 })
 
+app.use('/no-cache', function (req, res, next){
+  res.set('Cache-control', `no-store`)
+  next()
+})
+
 /*
  * Good Counter Middleware [runs on every request, but doesn't send response]
  *   Persistently tracks IP specific hits using mysql and path
@@ -63,7 +68,7 @@ app.use(function (req, res, next){
 
 // GET for any path not yet routed to print IP, path, and hits
 app.get('*', function (req, res) {
-  res.send(`Welcome to Zombocom, ${req.parsed_ip}! You've been to path [${req.path}] [${req.hits}] times.`)
+  res.send(`Welcome to Zombocom, ${req.parsed_ip}! Your request for [${req.path}] has reached the server [${req.hits}] times.`)
 })
 
 // Wait for DB

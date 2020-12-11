@@ -29,31 +29,31 @@ module "vpc" {
 
   name = local.resource_prefix
 
-  azs                  = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
 
   cidr = local.cidr_block
   # Calculate the subnet cidrs using the vpc cidr
-  private_subnets      = [cidrsubnet(local.cidr_block, 8, 128), cidrsubnet(local.cidr_block, 8, 129), cidrsubnet(local.cidr_block, 8, 130)]
-  public_subnets       = [cidrsubnet(local.cidr_block, 8, 0), cidrsubnet(local.cidr_block, 8, 1), cidrsubnet(local.cidr_block, 8, 2)]
+  private_subnets = [cidrsubnet(local.cidr_block, 8, 128), cidrsubnet(local.cidr_block, 8, 129), cidrsubnet(local.cidr_block, 8, 130)]
+  public_subnets  = [cidrsubnet(local.cidr_block, 8, 0), cidrsubnet(local.cidr_block, 8, 1), cidrsubnet(local.cidr_block, 8, 2)]
 
   enable_ipv6 = true
 
-  enable_nat_gateway = true
-  single_nat_gateway = local.production_vpc_config ? false : true
+  enable_nat_gateway     = true
+  single_nat_gateway     = local.production_vpc_config ? false : true
   one_nat_gateway_per_az = local.production_vpc_config ? true : false
 
-#  public_subnet_tags = {
-#    Name = "overridden-name-public"
-#  }
-#
-#  tags = {
-#    Owner       = "user"
-#    Environment = "dev"
-#  }
-#
-#  vpc_tags = {
-#    Name = "vpc-name"
-#  }
+  #  public_subnet_tags = {
+  #    Name = "overridden-name-public"
+  #  }
+  #
+  #  tags = {
+  #    Owner       = "user"
+  #    Environment = "dev"
+  #  }
+  #
+  #  vpc_tags = {
+  #    Name = "vpc-name"
+  #  }
 }
 
 
@@ -68,7 +68,7 @@ locals {
   #public_subnets = data.aws_subnet_ids.default.ids
 
   ## VPC Module
-  vpc_id  = module.vpc.vpc_id
-  public_subnet_ids = module.vpc.public_subnets
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = module.vpc.public_subnets
   private_subnet_ids = module.vpc.private_subnets
 }
