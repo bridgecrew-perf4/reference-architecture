@@ -16,9 +16,9 @@ locals {
   container_port = "8000"
 
   # DNS Configuration
-  hosted_zone_id  = "ZFA32P2PPHOAL"
-  certificate_arn = "arn:aws:acm:us-east-1:248615503339:certificate/8fd1eb9b-06aa-4ff4-86bb-0d01eb0fdca6"
-  service_fqdn    = "${local.resource_prefix}.ussba.io"
+  hosted_zone_id  = "ZFA32P32P32P3"
+  certificate_arn = "arn:aws:acm:us-east-1:123412341234:certificate/12341234-1234-1234-1234-123412341234"
+  service_fqdn    = "${local.resource_prefix}.example.com"
 }
 
 ## Convenience Variables
