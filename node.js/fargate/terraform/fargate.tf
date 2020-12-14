@@ -1,5 +1,4 @@
 module "fargate-service" {
-  #source = "../../../../terraform-aws-easy-fargate-service/"
   source             = "USSBA/easy-fargate-service/aws"
   version            = "~> 2.3"
   family             = local.resource_prefix
