@@ -20,9 +20,9 @@ module "fargate-service" {
 
   # CloudFront/DNS stuff
   use_cloudfront  = true
-  hosted_zone_id  = "ZFA32P2PPHOAL"
-  certificate_arn = "arn:aws:acm:us-east-1:248615503339:certificate/8fd1eb9b-06aa-4ff4-86bb-0d01eb0fdca6"
-  service_fqdn    = "${local.resource_prefix}.ussba.io"
+  hosted_zone_id  = local.hosted_zone_id
+  certificate_arn = local.certificate_arn
+  service_fqdn    = local.service_fqdn
 }
 output "load_balancer_dns" {
   value = module.fargate-service.alb_dns

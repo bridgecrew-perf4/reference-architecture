@@ -5,12 +5,13 @@ module "aurora" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 2.0"
 
-  name        = local.resource_prefix
-  engine      = "aurora-mysql"
-  engine_mode = "serverless"
+  name = local.resource_prefix
 
-  # Serverless v2
+  # Serverless v2; requires a preview flag at time of writing
+  #   - Serverless v1 functions very similarly, but with different flags for engine/engine_version
+  engine         = "aurora-mysql"
   engine_version = "5.7.mysql_aurora.2.07.1"
+  engine_mode    = "serverless"
 
   ## Replicas must be disabled for serverless
   replica_scale_enabled = false
