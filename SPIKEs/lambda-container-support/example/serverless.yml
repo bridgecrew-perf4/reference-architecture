@@ -13,6 +13,4 @@ functions:
       - httpApi: 'GET /random-letter'
 
 custom:
-  account: '502235151991'
-
-# https://lbpnflklgb.execute-api.us-east-1.amazonaws.com/random-letter
+  account: '123412341234'
