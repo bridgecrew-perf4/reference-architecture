@@ -1,7 +1,10 @@
 frameworkVersion: '2'
-
 service: zombo-sls
 #enableLocalInstallationFallback: true
+
+## Uncomment to use sls offline
+#plugins:
+#  - serverless-offline
 
 provider:
   name: aws

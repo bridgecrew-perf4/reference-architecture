@@ -14,6 +14,8 @@
 * AWS credentials available to your shell
 * Terraform 0.13+
 * Serverless cli 2 (`npm i -g serverless@2`)
+* Serverless offline (`npm i -g serverless-offline`)
+* Docker/Docker Compose (optional for offline dynamodb testing)
 
 ### Variables
 
@@ -50,6 +52,20 @@ deployment process from a developer perspective, and doesn't require knowledge o
 * Configure `serverless.yml` as described above
 * Run `serverless deploy --stage <environment>`
 * Serverless will output a path for you to test your code
+
+### Serverless Offline
+
+To simulate running serverless offline, including an offline dynamodb here's an example using docker:
+
+* Install serverless-offline: `npm i -g serverless-offline`
+* Uncomment the plugins block of serverless.yml; add `serverless-offline`
+* Start a docker daemon with docker-compose: `docker-compose up -d`
+* Run serverless offline: `sls offline start`
+* Connect to serverless locally:
+  * `http://localhost:3000/dev/`
+  * `http://localhost:3000/dev/foo`
+  * `http://localhost:3000/dev/bar`
+  * `http://localhost:3000/dev/bad-hits`
 
 
 ## Next Steps

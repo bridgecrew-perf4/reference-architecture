@@ -1,5 +1,15 @@
 const AWS = require('aws-sdk');
-const dynamo = new AWS.DynamoDB.DocumentClient();
+
+let dynamo_options = {}
+
+if(process.env.IS_OFFLINE === "true") {
+  dynamo_options.region = "localhost"
+  dynamo_options.endpoint = "http://localhost:8000"
+  dynamo_options.accessKeyId = 'DEFAULT_ACCESS_KEY'  // needed if you don't have aws credentials at all in env
+  dynamo_options.secretAccessKey = 'DEFAULT_SECRET' // needed if you don't have aws credentials at all in env
+}
+
+const dynamo = new AWS.DynamoDB.DocumentClient(dynamo_options);
 
 const serverless = require('serverless-http');
 const express = require('express')
