@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-lambda-response-builder": "^1.0.15",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "serverless-http": "^2.6.0"
   }
 }
