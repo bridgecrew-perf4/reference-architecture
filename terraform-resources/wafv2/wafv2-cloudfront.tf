@@ -24,12 +24,14 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        # The for_each array is a list of every rule you want turned off
+        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
         dynamic "excluded_rule" {
-          iterator = rule
-          # The array below is a list of every rule you want turned off
-          # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
           for_each = []
           #for_each = ["NoUserAgent_HEADER"]
+
+          iterator = rule
           content {
             name = rule.value
           }
@@ -57,12 +59,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesSQLiRuleSet"
         vendor_name = "AWS"
+        # The for_each array is a list of every rule you want turned off
+        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
         dynamic "excluded_rule" {
-          iterator = rule
-          # The array below is a list of every rule you want turned off
-          # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
           for_each = []
           #for_each = ["SQLi_URIPATH"]
+
+          iterator = rule
           content {
             name = rule.value
           }
@@ -88,12 +91,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesLinuxRuleSet"
         vendor_name = "AWS"
+        # The for_each array is a list of every rule you want turned off
+        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
         dynamic "excluded_rule" {
-          iterator = rule
-          # The array below is a list of every rule you want turned off
-          # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
           for_each = []
           #for_each = ["LFI_QUERYARGUMENTS"]
+
+          iterator = rule
           content {
             name = rule.value
           }
@@ -119,12 +123,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesUnixRuleSet"
         vendor_name = "AWS"
+        # The for_each array is a list of every rule you want turned off
+        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
         dynamic "excluded_rule" {
-          iterator = rule
-          # The array below is a list of every rule you want turned off
-          # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
           for_each = []
           #for_each = ["UNIXShellCommandsVariables_QUERYARGUMENTS"]
+
+          iterator = rule
           content {
             name = rule.value
           }
@@ -153,12 +158,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
   #    managed_rule_group_statement {
   #      name        = "AWSManagedRulesWindowsRuleSet"
   #      vendor_name = "AWS"
+  #      # The for_each array is a list of every rule you want turned off
+  #      # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #      dynamic "excluded_rule" {
-  #        iterator = rule
-  #        # The array below is a list of every rule you want turned off
-  #        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #        for_each = []
   #        #for_each = ["PowerShellCommands_Set1_QUERYARGUMENTS"]
+  #
+  #        iterator = rule
   #        content {
   #          name = rule.value
   #        }
@@ -187,12 +193,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
   #    managed_rule_group_statement {
   #      name        = "AWSManagedRulesPHPRuleSet"
   #      vendor_name = "AWS"
+  #      # The for_each array is a list of every rule you want turned off
+  #      # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #      dynamic "excluded_rule" {
-  #        iterator = rule
-  #        # The array below is a list of every rule you want turned off
-  #        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #        for_each = []
   #        #for_each = ["PHPHighRiskMethodsVariables_QUERYARGUMENTS"]
+  #
+  #        iterator = rule
   #        content {
   #          name = rule.value
   #        }
@@ -221,12 +228,13 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
   #    managed_rule_group_statement {
   #      name        = "AWSManagedRulesWordPressRuleSet"
   #      vendor_name = "AWS"
+  #      # The for_each array is a list of every rule you want turned off
+  #      # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #      dynamic "excluded_rule" {
-  #        iterator = rule
-  #        # The array below is a list of every rule you want turned off
-  #        # See AWS docs for the rule name: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   #        for_each = []
   #        #for_each = ["WordPressExploitableCommands_QUERYSTRING"]
+  #
+  #        iterator = rule
   #        content {
   #          name = rule.value
   #        }
