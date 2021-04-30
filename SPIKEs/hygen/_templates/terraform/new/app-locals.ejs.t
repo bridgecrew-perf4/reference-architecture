@@ -23,19 +23,19 @@ locals {
       zones = formatlist("%s%s", local.region, keys(local.zone_map)) # result: ["us-east-1a", "us-east-1b"]
     }
     dev = {
-      account_id         = "123412341234"
+      account_id         = "<%= lower_account %>"
       single_nat_gateway = true
-      cidr               = "10.250.0.0/16"
+      cidr               = "<%= cidr %>"
     }
     stg = {
-      account_id         = "123412341234"
+      account_id         = "<%= upper_account %>"
       single_nat_gateway = true
-      cidr               = "10.251.0.0/16"
+      cidr               = "<%= cidr %>"
     }
     prd = {
-      account_id         = "567856785678"
+      account_id         = "<%= upper_account %>"
       single_nat_gateway = false
-      cidr               = "10.252.0.0/16"
+      cidr               = "<%= cidr %>"
     }
   }
 
@@ -43,6 +43,6 @@ locals {
   env = merge(local.ckan.default, local.ckan[terraform.workspace])
 
   # subnet calculations
-  public_subnet_cidr_blocks  = [for n in toset(values(local.zone_map)) : cidrsubnet(local.env.cidr, 8, tonumber(n))] # result: ["10.250.0.0/24", "10.250.1.0/24"]
-  private_subnet_cidr_blocks = [for n in toset(values(local.zone_map)) : cidrsubnet(local.env.cidr, 8, tonumber(n) + 128)] # result: ["10.250.128.0/24", "10.250.129.0/24"]
+  public_subnet_cidr_blocks  = [for n in toset(values(local.zone_map)) : cidrsubnet(local.env.cidr, 8, tonumber(n))] # result: ["<%= public_cidr_one %>", "<%= public_cidr_two %>"]
+  private_subnet_cidr_blocks = [for n in toset(values(local.zone_map)) : cidrsubnet(local.env.cidr, 8, tonumber(n) + 128)] # result: ["<%= private_cidr_one %>", "<%= private_cidr_two %>"]
 }
