@@ -4,6 +4,23 @@
 
 Hygen is a code template generator
 
+To install you can perform the following
+
+Brew
+```
+brew tap jondot/tap
+brew install hygen
+```
+
+NPM
+```
+npm i -g hygen
+```
+
+For everything else outside the scope of this spike, please read the documentation
+
+[Hygen Documentation](https://www.hygen.io/docs/quick-start)
+
 ## Major Considerations
 
 Very limited documentation around anything outside of Redux, React and Express. All templates use embedded JavaScript. Even though its just a templating engine I was not able to find any threads online regarding people using this for Terraform.
@@ -21,12 +38,14 @@ Very limited documentation around anything outside of Redux, React and Express. 
 
 ## How It Works
 
+**If you are not setting up Hygen from scratch and are cloning this repository to deploy the terraform templates you can skip straight to step 3**
+
 1. You need to initialize the Hygen generator which will provide you with a base terraform directory that you can start populating with ejs templates. These templates contain a ```to``` block to indicate the folder structure Hygen should populate.
    ```
    hygen init self
    ```
 
-2. Create a new project using Hygen generator. To do so, run the command below which will provide you with a base terraform directory that you can start populating with ejs templates. These templates contain a ```to``` block to indicate the folder structure Hygen should populate.
+2. Create a new project using Hygen generator. To do so, run the command below which will provide you with a base terraform directory that you can start populating with ejs templates. These templates contain a ```to``` block to indicate the folder structure Hygen should populate. If you are pulling this repo you can skip to step 3 and run the ```hygen terraform new``` command.
    ```
    hygen generator new terraform
    ```
