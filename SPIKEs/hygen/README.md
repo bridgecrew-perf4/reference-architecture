@@ -21,6 +21,8 @@ For everything else outside the scope of this spike, please read the documentati
 
 [Hygen Documentation](https://www.hygen.io/docs/quick-start)
 
+**OPINION**: I think Hygen has some potential benefits, however, I do not think it will solve our problems. It seems to me as though other engineers are not aware of our reference architecture repository and we are not involved in the onboarding process of new teams. If we implement Hygen but do not solve these other challenges, teams wont know about Hygen therefore, it solves nothing. Hygen, while possibly making it easier to put out infra code, makes the infra code more of a black box and while having a tool to make it faster does not really solve the initial issue. I think we should attempt to fix the onboarding issue, make new devops engineers aware that this repo exist before attempting to fix a process issue with a tool.
+
 ## Major Considerations
 
 Very limited documentation around anything outside of Redux, React and Express. All templates use embedded JavaScript. Even though its just a templating engine I was not able to find any threads online regarding people using this for Terraform.
