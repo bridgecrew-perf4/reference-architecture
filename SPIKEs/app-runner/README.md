@@ -20,6 +20,9 @@ App Runner does not create the following resources and it also does not support 
 App Runner essentially just deploys your containers and does not deploy / configure any outside infrastructure that your application may need to actually work.
   - VPC & ECS cluster it deploys your application to are abstracted away from the engineer and appears "serverless".
 
+**DISLAIMER**: Possible bug with aws_apprunner_service. There appears to be a race condition where sometimes the service creates the IAM Role, Policy, and the service
+and other times it creates the IAM Role, Policy, errors out, and on re-deploy works fine. Attempted to add depends_on to resources but am having the same problem. 
+
 ## Spike Questions
  
 - Does it support multi container deployments?

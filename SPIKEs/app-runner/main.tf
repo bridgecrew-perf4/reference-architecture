@@ -1,30 +1,29 @@
 variable "image_identifier" {
-  description = "ecr url and image tag. example, url:tag"  
+  description = "ecr url and image tag. example, url:tag"
 }
 
 resource "aws_apprunner_service" "example" {
-  depends_on   = [aws_iam_role.role, aws_iam_policy.policy] 
   service_name = "example"
-  
+
   source_configuration {
 
     authentication_configuration {
-      access_role_arn = aws_iam_role.role.arn  
+      access_role_arn = aws_iam_role.role.arn
     }
 
     image_repository {
       image_configuration {
-        port = "80" 
+        port = "80"
       }
-      image_identifier = var.image_identifier
+      image_identifier      = var.image_identifier
       image_repository_type = "ECR"
     }
-  }  
+  }
 }
 
 resource "aws_iam_role" "role" {
   name = "AppRunnerRole"
-    
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -32,11 +31,11 @@ resource "aws_iam_role" "role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "build.apprunner.amazonaws.com"  
-        }  
+          Service = "build.apprunner.amazonaws.com"
+        }
       }
-    ]  
-  })  
+    ]
+  })
 }
 
 resource "aws_iam_policy" "policy" {
@@ -51,15 +50,15 @@ resource "aws_iam_policy" "policy" {
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
         ]
-        Effect = "Allow"
-        Resource = "*"  
+        Effect   = "Allow"
+        Resource = "*"
       },
-    ]  
+    ]
   })
 }
 
 resource "aws_iam_policy_attachment" "attachment" {
-  name  = "policy-attachment"
-  roles = [aws_iam_role.role.name]
-  policy_arn = aws_iam_policy.policy.arn 
+  name       = "policy-attachment"
+  roles      = [aws_iam_role.role.name]
+  policy_arn = aws_iam_policy.policy.arn
 }
