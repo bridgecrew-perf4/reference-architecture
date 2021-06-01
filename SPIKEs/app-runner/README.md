@@ -11,12 +11,14 @@ and I think easier to use.
 ## Major Considerations
  
 App Runner does not create the following resources and it also does not support taking the below resources as arguments for a micro service deployment.
-  - VPC
-  - Databases (RDS/Dynamo)
-  - S3 Buckets
+  - VPC.
+  - Databases (RDS/Dynamo).
+  - S3 Buckets.
   - Does not have capability to adjust ci/cd beyond your container being deployed.
+  - One container per "app_runner" resource.
 
 App Runner essentially just deploys your containers and does not deploy / configure any outside infrastructure that your application may need to actually work.
+  - VPC & ECS cluster it deploys your application to are abstracted away from the engineer and appears "serverless".
 
 ## Spike Questions
  
