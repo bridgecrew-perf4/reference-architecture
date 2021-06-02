@@ -293,6 +293,50 @@ resource "aws_wafv2_web_acl" "waf_regional" {
   #    sampled_requests_enabled   = false
   #  }
   #}
+
+  ## WAF Bot Control
+  #rule {
+  #  name     = "AWS-AWSManagedRulesBotControlRuleSet"
+  #  priority = 10
+  #  override_action {
+  #    none {}
+  #  }
+  #  statement {
+  #    managed_rule_group_statement {
+  #      name        = "AWSManagedRulesBotControlRuleSet"
+  #      vendor_name = "AWS"
+  #      dynamic "excluded_rule" {
+  #        for_each = [
+  #          ## For a regional WAF, it's recommended to not exclude anything.  Any bots should be accessing the site through cloudfront (unless, of course, there are certain sites not using CloudFront)
+  #          #"CategoryAdvertising",
+  #          #"CategoryArchiver" ,
+  #          #"CategoryContentFetcher",
+  #          #"CategoryHttpLibrary",
+  #          #"CategoryLinkChecker",
+  #          #"CategoryMiscellaneous",
+  #          #"CategoryMonitoring",
+  #          #"CategoryScrapingFramework",
+  #          #"CategorySearchEngine",
+  #          #"CategorySecurity",
+  #          #"CategorySeo",
+  #          #"CategorySocialMedia",
+  #          #"SignalAutomatedBrowser",
+  #          #"SignalKnownBotDataCenter",
+  #          #"SignalNonBrowserUserAgent",
+  #        ]
+  #        iterator = rule
+  #        content {
+  #          name = rule.value
+  #        }
+  #      }
+  #    }
+  #  }
+  #  visibility_config {
+  #    cloudwatch_metrics_enabled = true
+  #    metric_name                = "AWS-AWSManagedRulesBotControlRuleSet"
+  #    sampled_requests_enabled   = true
+  #  }
+  #}
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name = "${local.waf_regional_prefix}-waf"
