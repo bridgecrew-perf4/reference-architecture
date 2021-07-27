@@ -1,0 +1,159 @@
+frameworkVersion: '2'
+service: service-proxy-sls
+#enableLocalInstallationFallback: true
+
+## Uncomment to use sls offline
+plugins:
+  - serverless-apigateway-service-proxy
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'} # Set the default stage used. Default is dev
+  region: ${opt:region, 'us-east-1'}
+  #vpc:
+  #  subnetIds: ${ssm:/${self:provider.stage}/network/private_subnet_ids}
+  #  #securityGroupIds: []
+  apiGateway:
+    restApiId: ${ssm:${self:custom.parameter_prefix}/apigw_id}
+    restApiRootResourceId: ${ssm:${self:custom.parameter_prefix}/apigw_root_resource_id}
+  #role: ${ssm:${self:custom.parameter_prefix}/lambda_role_arn}
+
+package:
+  ## If you want serverless to package the zip for you, exclude files here
+  exclude:
+  - terraform/**
+  - .nvmrc
+  ## If you build a zip in advance, configure it here
+  #artifact: workdir/prebuilt-zipfile.zip
+  excludeDevDependencies: false
+
+#functions:
+#  express:
+#    name: ${self:custom.resource_prefix}-express
+#    handler: src/index.handler
+#    environment:
+#      ## Pass the dynamodb table name via environment variable
+#      TABLE_NAME: ${self:custom.resource_prefix}-table
+#    events:
+#      - http: "GET /"
+#      - http: "GET /{proxy+}"
+custom:
+  ## Convenience variables to avoid repetition
+  resource_prefix: ${self:service}-${self:provider.stage}
+  parameter_prefix: /${self:service}/${self:provider.stage}
+  table_name: ${self:custom.resource_prefix}-table
+  table_name_advanced: ${self:custom.resource_prefix}-table
+  apiGatewayServiceProxies:
+    - dynamodb:
+        # Example using httpie:
+        # $ http PUT https://__________.execute-api.us-east-1.amazonaws.com/dev/feedback_basic?dd_item_id=1 product:='{"S": "FOO"}' comment:='{"S": "It Rocks"}'
+        # $ http PUT https://__________.execute-api.us-east-1.amazonaws.com/dev/feedback_basic?dd_item_id=2 product:='{"S": "BAR"}' comment:='{"S": "It Rocks, too"}'
+        path: /feedback_basic
+        method: put
+        tableName: ${self:custom.table_name}
+        hashKey: # set pathParam or queryStringParam as a partitionkey.
+          queryStringParam: dd_item_id  # ID of the HashKey used when creating DynamoDB Table
+          #pathParam: dd_item_id        # You could instead use a parameter in the path, and need to add `/{dd_item_id}` in the `path:` above
+          attributeType: S              # The type of the DynamoDB Key
+        action: PutItem                 # specify action to the table what you want to take on DD
+        #condition: attribute_not_exists(Id) # optional Condition Expressions parameter for the table
+        cors: true
+    - dynamodb:
+        # Example:
+        #   $ http https://2oc5lo0xol.execute-api.us-east-1.amazonaws.com/dev/feedback_basic/1
+        #     Response: { "comment": "It Rocks", "dd_item_id": "1", "product": "FOO" }
+        #   $ http https://2oc5lo0xol.execute-api.us-east-1.amazonaws.com/dev/feedback_basic/2
+        #     Response: { "comment": "It Rocks, too", "dd_item_id": "2", "product": "BAR" }
+        path: /feedback_basic/{dd_item_id}
+        method: get
+        tableName: ${self:custom.table_name}
+        hashKey:
+          pathParam: dd_item_id
+          attributeType: S
+        action: GetItem
+        cors: true
+    - dynamodb:
+        # Example: Put with a product in the path
+        #   $ http PUT https://2oc5lo0xol.execute-api.us-east-1.amazonaws.com/dev/feedback_advanced/product/FOO comment="Not too advanced for me"
+        #   Response Header Ex: f9edae45-4ede-456e-9dbb-1075c3b5009c (used below to GET)
+        path: /feedback_advanced/product/{product}
+        method: put
+        tableName: ${self:custom.table_name_advanced}
+        hashKey: # set pathParam or queryStringParam as a partitionkey.
+          queryStringParam: this_is_not_used
+          attributeType: this_is_not_used
+        action: PutItem # I believe only used to sort out IAM Permissions
+        #condition: attribute_not_exists(Id) # optional Condition Expressions parameter for the table
+        cors: true #Sets CORS to be _WIDE OPEN_.  This is not typically what you want when you CORS
+        request:
+          template:
+            # For a list of all variables, see the aws docs: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
+            # This block will set:
+            #  dd_item_id to be the UUID of the request made to apigw
+            #  timestamp to be the epoch of the request
+            #  product to be what was provided in the url path
+            #  AND any json strings passed into the body
+            application/json: >-
+              {
+                "TableName": "${self:custom.table_name_advanced}",
+                "Item": {
+                  #set ($body = $util.parseJson($input.body))
+                  #foreach( $key in $body.keySet())
+                    #set ($item = $body.get($key))
+                    "$key":{"S" : "$item"},
+                  #end
+                  "product": {"S": "$input.params('product')"},
+                  "timestamp": {"N": "$context.requestTimeEpoch"},
+                  "dd_item_id": {"S": "$context.requestId"}
+                }
+              }
+    - dynamodb:
+        # Example:
+        #   $ http GET https://2oc5lo0xol.execute-api.us-east-1.amazonaws.com/dev/feedback_advanced?dd_item_id=f9edae45-4ede-456e-9dbb-1075c3b5009c
+        #     Response: { "comment": "Not too advanced for me", "dd_item_id": "f9edae45-4ede-456e-9dbb-1075c3b5009c", "product": "FOO", "timestamp": "1627418692851" }
+        path: /feedback_advanced
+        method: get
+        tableName: ${self:custom.table_name_advanced}
+        hashKey:
+          queryStringParam: dd_item_id
+          attributeType: S
+        #rangeKey:
+        #  pathParam: sort
+        #  attributeType: S
+        action: GetItem
+        request:
+          template:
+            application/json: >-
+              {
+                "TableName": "${self:custom.table_name_advanced}",
+                "Key": {
+                  "dd_item_id": {"S": "$input.params().querystring.dd_item_id"}
+                }
+              }
+        cors: true
+    - dynamodb:
+        # Example:
+        #   $ http https://<MY_API_ID>.execute-api.us-east-1.amazonaws.com/dev/feedback_advanced/14e66381-be15-45b3-9b98-fb7ba2298b95
+        #   Response: { "dd_item_id": "14e66381-be15-45b3-9b98-fb7ba2298b95", "feedback": "I think its pretty cool, too" }
+        path: /feedback_advanced/{dd_item_id}
+        method: get
+        tableName: ${self:custom.table_name_advanced}
+        hashKey:
+          pathParam: dd_item_id
+          attributeType: S
+        #rangeKey:
+        #  pathParam: timestamp
+        #  attributeType: N
+        action: GetItem
+        request:
+          template:
+            application/json: >-
+              {
+                "TableName": "${self:custom.table_name_advanced}",
+                "Key": {
+                  "dd_item_id": {"S": "$input.params('dd_item_id')"}
+                }
+              }
+        cors: true
