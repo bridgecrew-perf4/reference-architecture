@@ -66,10 +66,10 @@ data.Items.forEach((event, index) => {
 })
 ```
 #### Strengths
-There's only one loop to reason around.  The loop is going over every event Object and then using the native DOM querySelector() to specifically fill in the data.
+There's only one loop to reason around.  The loop is going over every event Object and then using the native DOM querySelector() to specifically fill in the data.  It's easy to see what exactly is happening.
 
 #### Weaknesses
-It's more verbose.
+It's more verbose.  It requires more code to support any change.
 
 ### Solution 2
 ```javascript
@@ -84,10 +84,10 @@ data.Items.forEach((event, index) => {
 })
 ```
 #### Strengths
-The use of a neededFields variable makes it easier to pull only the data you need.  You have less duplication of code across lines (fewer querySelector calls).
+The use of a neededFields variable makes it easier to pull only the data you need.  You have less duplication of code across lines (fewer specific querySelector calls).  
 
 #### Weaknesses
-Two loops are more difficult to reason around, and you have to maintain the neededFields array.
+Two loops are more difficult to reason around, especially nested loops, and you have to maintain the neededFields array.
 
 ### Solution 3
 ```javascript
