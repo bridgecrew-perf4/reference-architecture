@@ -1,0 +1,21 @@
+{
+  "name": "serverless-dynamodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda-response-builder": "^1.0.15",
+    "express": "^4.17.1",
+    "serverless": "^2.52.1",
+    "serverless-http": "^2.6.0",
+    "serverless-offline": "^7.0.0"
+  },
+  "devDependencies": {
+    "serverless-apigateway-service-proxy": "^1.14.0"
+  }
+}
