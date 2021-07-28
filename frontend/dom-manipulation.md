@@ -3,25 +3,27 @@
 Given a fetch() function that returns an Array of data where each element is an event Object containing the following keys/values:
 
 ```javascript
-address_city: "Fort Worth"
-address_state: "TX"
-address_street_1: "500 Main Street"
-address_street_2: "Suite 20"
-address_zip: "75621"
-contact_email: "bob@underwood.com"
-contact_name: "Bob Underwood"
-contact_phone: "817-555-9151"
-cost: "$5"
-description: "Come learn how to write a business plan"
-end_time: "20200525T094419Z"
-eventID: "001"
-location_name: "Small Business Development Center"
-office: "Dallas/Fort Worth"
-recurring: false
-registration_url: "https://smallbiztx.com/write-a-business-plan.html"
-start_time: "20200525T094419Z"
-title: "Business Plan Writing 101"
-type: "in-person"
+{
+    address_city: "Fort Worth",
+    address_state: "TX",
+    address_street_1: "500 Main Street",
+    address_street_2: "Suite 20",
+    address_zip: "75621",
+    contact_email: "bob@underwood.com",
+    contact_name: "Bob Underwood",
+    contact_phone: "817-555-9151",
+    cost: "$5",
+    description: "Come learn how to write a business plan",
+    end_time: "20200525T094419Z",
+    eventID: "001",
+    location_name: "Small Business Development Center",
+    office: "Dallas/Fort Worth",
+    recurring: false,
+    registration_url: "https://smallbiztx.com/write-a-business-plan.html",
+    start_time: "20200525T094419Z",
+    title: "Business Plan Writing 101",
+    type: "in-person"
+}
 ```
 
 And an HTML table with rows structured as below (with every tr element containing a sequential data-row-id="#", as 1, 2, 3, etc.):
