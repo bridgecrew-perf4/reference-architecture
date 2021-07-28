@@ -25,7 +25,7 @@ Yes, it is ready for a Production environment use case.
 
 In terms of strategic fit, this could be a fewer dependency, easier to grok, uniform way of both writing serverless applications and deploying them.  The imperative coding style of Python, plus the larger standard library, are both huge boons in our dual quests to make our code easier to understand and to reduce our total size of codebase.
 
-Finally, at 74kb zipped (about the size of React, but doing so much more), it really is a micro-framework:
+Finally, at 74kb unzipped (about the size of ReactJS when zipped), it really is a micro-framework:
 
 ![Image of Chalice in file system](./img/chalice-really-is-a-micro-framework.png)
 
@@ -93,6 +93,15 @@ As of 07/28/21, Snyk Advisor gives Chalice a [score of 93 out of 100](https://sn
 
 ## Head Scratchers
 Here's a list of shortcomings from Chalice:
+
+### Magical Resource Names
+Chalice makes assumptions for you in order to perform its magic.  As an example, Lambda functions are automagically named after [a pattern of project_name+stage+handler_function](https://github.com/aws/chalice/issues/1368).  As another example, your API Gateway will always just get the name of the project.  For new accounts and less mature infrastructure, this matters less.  For older, more mature infrastructure with established naming conventions that provide predictability, this could be a source of confusion.
+
+The trick is to be careful and thoughtful when generating a new project using ```chalice new-project <name>```
+
+My finding is that you can modify the Lambda and IAM role resource names by changing the "app_name" in the /.chalice/config.json file, but you seemingly cannot change the API Gateway resource name away from the original ```<name>``` provided when running the new-project command.  If you want to re-name the directory for organizational purposes, then it makes sense to run ```chalice new-project <name>``` with whatever name you want your resources to receive in AWS, and then afterwards, rename the directory.  
+
+This is super hacky, but it works.
 
 ### Terraform Support
 Chalice does support exporting to Terraform, but even after a short while using ```chalice deploy``` you probably will start to wonder: why use Terraform at all?  The ergonomics of ```chalice deploy``` are nothing short of fantastic.  Still, the auto-generated Terraform code is not terrible.
