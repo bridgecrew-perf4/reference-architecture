@@ -117,6 +117,15 @@ We think its most readable because it only has a single loop and it follows a mo
 
 We think it's the fastest to develop, because it depends on native DOM methods and basic CSS queries.  It's logically easiest to reason around.
 
+## Pushing the Example
+After reviewing these, one of our most excellent technical leads, [peggles2](https://github.com/peggles2), pointed out that Solution 1 can quickly become the worst solution, if you have to do more with the data or if the number of fields grows.  She pointed out that it's important to remember that one size does not fit all.  We totally agree.  It's important to remember what we're optimizing for.
+
+In terms of -ilities, we should be optimizing for:
+- Predictability
+- Readability
+- Simplicity
+- Upgradability
+
 ## Open Question
 It feels like we're too tightly coupling data structure (and API response) to HTML structure and depending on future business requirements, this could be very problematic.  Is there a better way to do this that we haven't thought of yet?
 
