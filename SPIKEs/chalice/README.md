@@ -19,20 +19,77 @@ With a little more [upfront strategic thought](https://alexkrupp.typepad.com/sen
 - How does it fit into our new S3 static website + API Gateway + Lambda strategy?
 
 ## Answers
+In terms of maturity, Version 1.0 was released on July 31, 2017.  The project appears well maintained.  The maintainers track experimental features (APIs) by version number, and they provide upgrade notes for versions with major changes.
 
+Yes, it is ready for a Production environment use case.
+
+In terms of strategic fit, this could be a fewer dependency, easier to grok, uniform way of both writing serverless applications and deploying them.  The imperative coding style of Python, plus the larger standard library, are both huge boons in our dual quests to make our code easier to understand and to reduce our total size of codebase.
+
+Finally, at 74kb zipped (about the size of React, but doing so much more), it really is a micro-framework:
+
+![Image of Chalice in file system](./img/chalice-really-is-a-micro-framework.png)
 
 ## Bright Spots
+Here are the better parts of Chalice:
 
 ### Local Development
-![Local Development Console](/img/chalice-local-dev-very-nice-1.png)
-![Local Development Browser](/img/chalice-local-dev-very-nice-2.png)
+Chalice provides a local Lambda environment that is fast and supports hot re-load:
+
+![Local Development Console](./img/chalice-local-dev-very-nice-1.png)
+
+This makes locally testing Lambda based API end points a charming experience:
+
+![Local Development Browser](./img/chalice-local-dev-very-nice-2.png)
+
+As an aside, this route is awesome for testing and is pulled straight from their tutorial docs:
+```python
+@app.route('/introspect')
+def introspect():
+    return app.current_request.to_dict()
+```
 
 ### Friendly Error Messages
-![Friendly Error Console](/img/chalice-passing-friendly-error-messages-1.png)
-![Friendly Error Code](/img/chalice-passing-friendly-error-messages-2.png)
+Chalice defines a set of standard error messages, which greatly improves upon the basic Lambda 500 internal server error.  These are:
+```python
+* BadRequestError - return a status code of 400
+* UnauthorizedError - return a status code of 401
+* ForbiddenError - return a status code of 403
+* NotFoundError - return a status code of 404
+* ConflictError - return a status code of 409
+* UnprocessableEntityError - return a status code of 422
+* TooManyRequestsError - return a status code of 429
+* ChaliceViewError - return a status code of 500
+```
+
+This makes common issues easy to handle:
+```python
+CITIES_TO_STATE = {
+    'seattle': 'WA',
+    'portland': 'OR',
+}
+
+@app.route('/cities/{city}')
+def state_of_city(city):
+    try:
+        return {'state': CITIES_TO_STATE[city]}
+    except KeyError:
+        raise BadRequestError("Unknown city '%s', valid choices are: %s" % (
+            city, ', '.join(CITIES_TO_STATE.keys())))
+```
+
+Here is an example of a BadRequestError:
+
+![Friendly Error Console](./img/chalice-passing-friendly-error-messages-1.png)
+
+
 
 ### Middleware
-You can register middleware per type of event handlers with options like s3, sns, sqs, cloudwatch, which is a great idea.  Imagine being able to uniformly transform all of the messages being passed to and from an SNS topic.
+You can register middleware per type of event handlers with options like s3, sns, sqs, cloudwatch, which is a great idea.  Imagine being able to uniformly transform all of the messages being passed to and from an SNS topic?  This feels very powerful.
+
+### Security
+As of 07/28/21, Snyk Advisor gives Chalice a [score of 93 out of 100](https://snyk.io/advisor/python/chalice) for being popular, well maintained, and having no documented security vulnerabilities.
+
+![Snyk Advisor for Chalice](./img/chalice-snyk-advisor.png)
 
 ## Head Scratchers
 Here's a list of shortcomings from Chalice:
