@@ -1,9 +1,21 @@
 # Codespaces
-GitHub [Codespaces](https://github.com/features/codespaces) is an offering from GitHub that allows developers to spin up a cloud developer environment via GitHub itself.  This uses Visual Studio Code and offers two ways of working:
+GitHub [Codespaces](https://github.com/features/codespaces) is an offering that allows developers to spin up a cloud developer environment via GitHub itself.  This uses Visual Studio Code and offers two ways of working:
 
 1. Using the in-browser editor, which is eerily similar to Visual Studio Code
-2. Connecting to the remote environment using your local Visual Studio Code and the Remote Coding Extension
+2. Connecting to the remote environment using an actual local Visual Studio Code and the Remote Coding Extension
 
+
+## Problem
+The agency struggles to support software developers, because there's little support for segmenting them on the secure network and providing them the tools they need to be productive.  This is mostly a result of dated thinking around security, but change is hard in large organizations.  It may never be possible for a developer to receive local administrator rights (what they really need) on their computer, so they can install the software they need on demand.
+
+## Opportunity
+Products like Codespaces might bridge the gap between security requirements and developer productivity needs, because they allow ephemeral environments to be spun up on demand, which are low-risk to the organization because they are naturally segmented (they live in "the cloud"), but also give the user full access to go fast and be productive, because each workspace is fully featured.
+
+## Questions
+- Can you use Codespaces as a replacement for a local development machine?
+- What is the performance like and is there latency in the experience?
+- What other things are worth knowing about Codespaces?
+- 
 ## Pricing
 Here's a breakdown of pricing with comparisons to similar services as seen on 08/25/21.
 
