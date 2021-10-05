@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  pgadmin:
+    build: .
+    image: dpage/pgadmin4
+    ports:
+      - 80:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sbaias@fearless.tech
+      PGADMIN_DEFAULT_PASSWORD: sbaias
+      #PGADMIN_DISABLE_POSTFIX: not-null
+      #PGADMIN_ENABLE_TLS: not-null
+      PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+      #PGADMIN_LISTEN_PORT: 80
+      #PGADMIN_CONFIG_LOGIN_BANNER: '<h4>IAS Authorised Users Only!</h4> Unauthorised use is strictly forbidden.'
+      #PGADMIN_CONFIG_MAIL_SERVER:   # default is localhost
+      #PGADMIN_CONFIG_MAIL_PORT:     # default is 25
+      #PGADMIN_CONFIG_MAIL_USE_SSL:  # default is False
+      #PGADMIN_CONFIG_MAIL_USE_TLS:  # default is False
+      #PGADMIN_CONFIG_MAIL_USERNAME: # default is empty string
+      #PGADMIN_CONFIG_MAIL_PASSWORD: # default is empty string
+    links:
+      - postgres
