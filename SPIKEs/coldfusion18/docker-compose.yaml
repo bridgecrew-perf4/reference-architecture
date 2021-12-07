@@ -1,0 +1,34 @@
+version: '3.3'
+
+
+services:
+
+  # ADD DATASOURCES:
+  # http://localhost/CFIDE/administrator/index.cfm
+
+  web:
+    #image: adobecoldfusion/coldfusion2018:latest
+    image: web
+    build:
+      context: ./
+    ports:
+    - 80:8500
+    environment:
+    # required
+    - acceptEULA=YES
+    # optional/overrides
+    - password=admin
+    - enableSecureProfile=false
+
+  mysql:
+    image: mysql:8
+    ports:
+    - 3306:3306
+    environment:
+    - MYSQL_ROOT_PASSWORD=admin
+    - MYSQL_DATABASE=coldfusion
+    - MYSQL_USER=cold
+    - MYSQL_PASSWORD=fusion
+    volumes:
+    - ./initdb/:/docker-entrypoint-initdb.d/:ro
+
