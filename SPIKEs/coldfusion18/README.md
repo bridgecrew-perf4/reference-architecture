@@ -8,7 +8,7 @@ The container must be built before we can do anything and we will use docker-com
 
 ```
 # pull containers from docker hub
-docker-comose pull
+docker-compose pull
 
 # build our customized coldfusion image
 docker-compose build
