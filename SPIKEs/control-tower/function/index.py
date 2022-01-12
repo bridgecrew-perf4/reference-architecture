@@ -101,7 +101,7 @@ def lambda_handler(event, context):
   print(compliance_type)
 
   config = boto3.client('config')
-  response = change.put_evaluations(
+  response = config.put_evaluations(
     Evaluations=[
       {
         'ComplianceResourceType': resourceType,
@@ -115,6 +115,6 @@ def lambda_handler(event, context):
 
 
 if __name__ == "__main__":
-  with open('item-change-event.json') as file:
+  with open('../item-change-event.json') as file:
     data = json.load(file)
   lambda_handler(data, None)
