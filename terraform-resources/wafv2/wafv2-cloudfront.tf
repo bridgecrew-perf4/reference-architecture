@@ -7,6 +7,42 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
     allow {}
   }
 
+  ## AWS Known Bad Inputs
+  ##  This rule is in response to CISA emergency directive 22-02 mitigate apache log4j vulnerability
+  ##  Note: This rule only applies when the application behind this WAF is using Log4j and should remain at priority #1 incrementing the remaining rules
+  ##  CVE-2021-44228 RCE
+  ##  https://www.cisa.gov/emergency-directive-22-02
+  #rule {
+  #  name     = "aws-log4j"
+  #  priority = 1
+  #  override_action {
+  #    none {}
+  #  }
+  #  statement {
+  #    managed_rule_group_statement {
+  #      name        = "AWSManagedRulesKnownBadInputsRuleSet"
+  #      vendor_name = "AWS"
+  #      #excluded_rule {
+  #      #  name = "Log4JRCE"
+  #      #}
+  #      excluded_rule {
+  #        name = "Host_localhost_HEADER"
+  #      }
+  #      excluded_rule {
+  #        name = "PROPFIND_METHOD"
+  #      }
+  #      excluded_rule {
+  #        name = "ExploitablePaths_URIPATH"
+  #      }
+  #    }
+  #  }
+  #  visibility_config {
+  #    cloudwatch_metrics_enabled = true
+  #    metric_name                = "${local.waf_cloudfront_prefix}-log4j-rce"
+  #    sampled_requests_enabled   = false
+  #  }
+  #}
+
   # AWS Common Rule Set
   #  The Core rule set (CRS) rule group contains rules that are generally applicable to web applications. This provides protection against exploitation of a wide range of vulnerabilities, including high risk and commonly occurring vulnerabilities described in OWASP publications. Consider using this rule group for any AWS WAF use case. 
   #  https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
@@ -337,6 +373,8 @@ resource "aws_wafv2_web_acl" "waf_cloudfront" {
   #    sampled_requests_enabled   = true
   #  }
   #}
+
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name = "${local.waf_cloudfront_prefix}-waf"
