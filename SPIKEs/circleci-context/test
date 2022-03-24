@@ -1,0 +1,11 @@
+#!/bin/bash
+docker image build -t cci .
+docker container run --rm -it \
+  -e CIRCLECI_CLI_TOKEN=$CIRCLECI_CLI_TOKEN \
+  -e CIRCLECI_ORG=USSBA \
+  -e CIRCLECI_CONTEXT=cci-testing \
+  -e AWS_PROFILE=$AWS_PROFILE \
+  -e IAM_USER_NAME=cci-testing \
+  -e MAX_KEY_AGE=0 \
+  -v ${HOME}/.aws/:/root/.aws/ \
+cci python main.py

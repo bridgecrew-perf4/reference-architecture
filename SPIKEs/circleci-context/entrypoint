@@ -1,0 +1,23 @@
+#!/bin/bash
+
+ENTRYPOINT_ERROR=0
+is_set() {
+  env | grep "^${1}=.\+$" > /dev/null
+  exit_code=$?
+  if [[ $exit_code != 0 ]]; then
+    ENTRYPOINT_ERROR=1
+    echo "Error: $1 is missing or has no assigned value"
+  fi
+  return $exit_code
+}
+is_set CIRCLECI_CLI_TOKEN
+is_set CIRCLECI_CONTEXT
+is_set CIRCLECI_ORG
+is_set IAM_USER_NAME
+if [[ $ENTRYPOINT_ERROR != 0 ]]; then
+  echo "Fatal: Misconfigured Environment"
+  echo "The container will now exit"
+  exit 1
+fi
+
+exec "$@"
