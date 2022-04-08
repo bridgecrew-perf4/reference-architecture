@@ -7,6 +7,8 @@ This repository contains the agency's reference architecture for:
 
 The application and infrastructure repositories for their respective projects can be found below.
 
+Please note that not all GitHub repositories listed below are publicly accessible and is designed to serve internal USSBA engineers only.
+
 ## Certify 
 
 ### Application Repositories
