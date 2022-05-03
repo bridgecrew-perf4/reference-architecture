@@ -63,3 +63,12 @@ DocumentRoot /var/www/localhost/htdocs/
   Header set "Content-Encoding" "gzip" env=SET_CEGZ
 </VirtualHost>
 ```
+
+## Conclusion
+
+It appears as though DIMS is required for Brightspot CMS. Images in the UI fail to load and this is believed to be due to the fact that DIMS is currently not being used.
+At the end of the spike I have found myself coming to the conclusion that a custom Apache image will need to be built. Apache appears to ProxyPass requests for `/` to the Brightspot container. 
+Looking at the default container used by mod_dims it appears as though Brightspot has built a custom image ontop of this container and have added custom configuration. When trying to integrate
+the brightspot DIMS container, which is not production ready we are running into a problem where it is appending an additional /cms to the url which is causing the routing to fail. I believe before
+attempting to tackle DIMS configuration we need to build an apache container and focus on just routing `/` to the Brightspot container. Once this is working we can then attempt to set the DIMS configuration
+in `context.xml`.
