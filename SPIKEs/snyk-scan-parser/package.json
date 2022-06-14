@@ -1,0 +1,21 @@
+{
+  "name": "snyk-scan-parser",
+  "version": "1.0.0",
+  "description": "Parses the output of Snyk JSON output",
+  "main": "main.js",
+  "scripts": {
+    "test": "test1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "TODO"
+  },
+  "keywords": [
+    "TODO"
+  ],
+  "author": "Jason",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jira-client": "^8.1.0"
+  }
+}
