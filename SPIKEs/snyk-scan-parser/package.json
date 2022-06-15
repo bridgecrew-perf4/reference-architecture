@@ -4,7 +4,8 @@
   "description": "Parses the output of Snyk JSON output",
   "main": "main.js",
   "scripts": {
-    "test": "test1"
+    "snyk": "node snyk.js",
+    "jira": "node jira.js"
   },
   "repository": {
     "type": "git",
